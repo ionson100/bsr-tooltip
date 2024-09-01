@@ -1,6 +1,6 @@
 {
-  "name": "bsr-tooltipu",
-  "version": "2.2.47",
+  "name": "bsr-tooltip",
+  "version": "2.2.49",
   "description": "React component tooltip",
   "author": "ionson100",
   "license": "MIT",
