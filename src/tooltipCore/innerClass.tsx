@@ -173,7 +173,12 @@ export class ToolTip {
         setTimeout(() => {
             this.innerRoot.unmount();
             if(this.isShow){
-                document.body.removeChild<HTMLDivElement>(this.div)
+                try {
+                    document.body.removeChild<HTMLDivElement>(this.div)
+                }catch (e){
+
+                }
+
             }
             this.props.target = undefined
         })
