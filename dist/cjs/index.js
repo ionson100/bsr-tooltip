@@ -145,7 +145,7 @@ var ToolTip = /** @class */ (function () {
     };
     ToolTip.prototype.mouseEnter = function (e) {
         e.preventDefault();
-        MapToolTip.forEach(function (value, key) {
+        MapToolTip.forEach(function (value) {
             value.Close();
         });
         if (!this.isShow) {

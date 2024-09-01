@@ -3,7 +3,7 @@ import {useToolTip} from './wrapper'
 
 
 export type {
-    Options, TooltipProps
+    Options, TooltipProps,ToolTip
 }
 
 export {

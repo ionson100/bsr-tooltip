@@ -108,7 +108,7 @@ export class ToolTip {
 
     private mouseEnter(e: MouseEvent) {
         e.preventDefault();
-        MapToolTip.forEach((value,key)=>{
+        MapToolTip.forEach((value)=>{
             value.Close()
         })
         if(!this.isShow){
