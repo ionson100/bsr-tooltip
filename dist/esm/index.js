@@ -75,7 +75,7 @@ var style = {
 var MapToolTip = new Map();
 var ToolTip = /** @class */ (function () {
     function ToolTip(props) {
-        var _a, _b, _c, _d, _e, _f, _g, _h;
+        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
         this.isShow = false;
         this.position = 'left';
         this.props = props;
@@ -99,7 +99,7 @@ var ToolTip = /** @class */ (function () {
         else {
             this.innerRoot.render(React.createElement("div", { style: style }, this.props.body));
         }
-        if ((_c = this.props.options) === null || _c === void 0 ? void 0 : _c.isWindows) {
+        if (((_c = this.props.options) === null || _c === void 0 ? void 0 : _c.isWindowsClick) === true || ((_d = this.props.options) === null || _d === void 0 ? void 0 : _d.isWindows) === true) {
             this.ActivateWindows();
             this.div.style.cursor = "pointer";
         }
@@ -107,18 +107,21 @@ var ToolTip = /** @class */ (function () {
             this.ActivateTooltip();
         }
         this.position = 'left';
-        if ((_d = this.props.options) === null || _d === void 0 ? void 0 : _d.position) {
+        if ((_e = this.props.options) === null || _e === void 0 ? void 0 : _e.position) {
             this.position = this.props.options.position;
         }
         this.marginVertical = 0;
-        if ((_e = this.props.options) === null || _e === void 0 ? void 0 : _e.marginVertical) {
+        if ((_f = this.props.options) === null || _f === void 0 ? void 0 : _f.marginVertical) {
             this.marginVertical = this.props.options.marginVertical;
         }
         this.marginHorizontal = 0;
-        if ((_f = this.props.options) === null || _f === void 0 ? void 0 : _f.marginHorizontal) {
+        if ((_g = this.props.options) === null || _g === void 0 ? void 0 : _g.marginHorizontal) {
             this.marginHorizontal = this.props.options.marginHorizontal;
         }
-        this.isWindows = !!(((_g = this.props.options) === null || _g === void 0 ? void 0 : _g.isWindowsClick) || ((_h = this.props.options) === null || _h === void 0 ? void 0 : _h.isWindows));
+        this.isWindows = false;
+        if (((_h = this.props.options) === null || _h === void 0 ? void 0 : _h.isWindowsClick) === true || ((_j = this.props.options) === null || _j === void 0 ? void 0 : _j.isWindows) === true) {
+            this.isWindows = true;
+        }
     }
     ToolTip.prototype.Close = function () {
         if (this.isShow) {
@@ -164,7 +167,7 @@ var ToolTip = /** @class */ (function () {
                 if (this.isWindows) {
                     h = element.offsetTop + element.offsetHeight / 2;
                 }
-                var w = element.offsetLeft - this.div.offsetWidth - 5 + this.marginHorizontal;
+                var w = element.offsetLeft - this.div.offsetWidth - 10 + this.marginHorizontal;
                 this.div.style.top = h + "px";
                 this.div.style.left = w + "px";
                 this.isShow = true;
@@ -180,7 +183,7 @@ var ToolTip = /** @class */ (function () {
                 this.isShow = true;
             }
             if (this.position === 'top') {
-                var h = element.offsetTop - this.div.offsetHeight - 5 + this.marginVertical;
+                var h = element.offsetTop - this.div.offsetHeight - 5 + this.marginVertical - 5;
                 var w = element.offsetLeft + element.offsetWidth / 2 - this.div.offsetWidth / 2 + this.marginHorizontal;
                 if (this.isWindows) {
                     w = element.offsetLeft + element.offsetWidth / 2;
@@ -223,4 +226,4 @@ var useToolTip = function (target, body, options) {
     }, [target === null || target === void 0 ? void 0 : target.current]);
 };
 
-export { useToolTip };
+export { ToolTip, useToolTip };

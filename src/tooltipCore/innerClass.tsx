@@ -57,8 +57,10 @@ export class ToolTip {
         }else{
             this.innerRoot.render(<div style={style}>{this.props.body}</div>)
         }
-        if(this.props.options?.isWindows){
+        this.isWindows=false
+        if(this.props.options?.isWindowsClick===true || this.props.options?.isWindows===true){
             this.ActivateWindows()
+            this.isWindows=true
             this.div.style.cursor = "pointer"
 
         }else{
@@ -77,7 +79,7 @@ export class ToolTip {
             this.marginHorizontal = this.props.options.marginHorizontal
         }
 
-        this.isWindows = !!(this.props.options?.isWindowsClick || this.props.options?.isWindows);
+
     }
 
     Close(){
@@ -129,7 +131,7 @@ export class ToolTip {
                 if(this.isWindows){
                     h=element.offsetTop + element.offsetHeight / 2
                 }
-                let w = element.offsetLeft- this.div.offsetWidth-5 +this.marginHorizontal
+                let w = element.offsetLeft- this.div.offsetWidth-10 +this.marginHorizontal
                 this.div.style.top = h + "px"
                 this.div.style.left = w + "px"
                 this.isShow=true;
@@ -145,7 +147,7 @@ export class ToolTip {
                 this.isShow=true;
             }
             if(this.position==='top'){
-                let h = element.offsetTop-this.div.offsetHeight-5+this.marginVertical;
+                let h = element.offsetTop-this.div.offsetHeight-5+this.marginVertical-5;
                 let w = element.offsetLeft+element.offsetWidth/2 - this.div.offsetWidth / 2+this.marginHorizontal
                 if(this.isWindows){
                     w = element.offsetLeft+element.offsetWidth/2

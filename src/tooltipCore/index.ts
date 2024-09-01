@@ -3,9 +3,9 @@ import {useToolTip} from './wrapper'
 
 
 export type {
-    Options, TooltipProps,ToolTip
+    Options, TooltipProps
 }
 
 export {
-    useToolTip
+    useToolTip,ToolTip
 }

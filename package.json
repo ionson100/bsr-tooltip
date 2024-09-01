@@ -1,6 +1,6 @@
 {
   "name": "bsr-tooltip",
-  "version": "2.2.49",
+  "version": "2.2.50",
   "description": "React component tooltip",
   "author": "ionson100",
   "license": "MIT",
@@ -23,7 +23,7 @@
 
   },
   "scripts": {
-    "build": "rollup -c --bundleConfigAsCjs && @powershell copy  ./src/tooltip/index.css ./dist"
+    "build": "rollup -c --bundleConfigAsCjs && @powershell copy  src/tooltipCore/index.css ./dist"
   },
   "eslintConfig": {
     "extends": [
