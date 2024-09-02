@@ -106,6 +106,13 @@ export class ToolTip {
         this.props.target?.addEventListener('mouseenter', this.mouseEnter)
         this.props.target?.addEventListener('mouseleave', this.mouseOut)
     }
+     getOffset(el: Element) {
+        const rect = el.getBoundingClientRect();
+        return {
+            left: rect.left + window.scrollX,
+            top: rect.top + window.scrollY
+        };
+    }
 
 
     private mouseEnter(e: MouseEvent) {
