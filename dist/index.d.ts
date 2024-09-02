@@ -10,7 +10,7 @@ type Options = {
     marginHorizontal?: number;
 };
 type TooltipProps = {
-    target?: HTMLElement;
+    target?: Element;
     body: ReactElement | string | number | undefined;
     options?: Options;
 };
@@ -28,11 +28,18 @@ declare class ToolTip {
     Close(): void;
     private ActivateWindows;
     private ActivateTooltip;
+    getOffsetPosition(el: Element): {
+        left: number;
+        top: number;
+    };
+    getOffsetAttrubute(el: Element): {
+        width: number;
+        height: number;
+    };
     private mouseEnter;
-    private mouseOut;
     ContextMenuWillUnmount(): void;
 }
 
-declare const useToolTip: (target: React.RefObject<HTMLElement> | null, body: ReactElement | string | number, options?: Options) => void;
+declare const useToolTip: (target: React.RefObject<Element> | null, body: ReactElement | string | number, options?: Options) => void;
 
 export { type Options, ToolTip, type TooltipProps, useToolTip };

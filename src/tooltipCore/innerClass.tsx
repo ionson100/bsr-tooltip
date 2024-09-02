@@ -12,7 +12,7 @@ export type Options ={
     marginHorizontal?:number
 }
 export type TooltipProps = {
-    target?: HTMLElement
+    target?: Element
     body: ReactElement | string | number | undefined
     options?:Options
 }
@@ -42,7 +42,7 @@ export class ToolTip {
         MapToolTip.set(this.id,this)
         this.Close=this.Close.bind(this)
         this.mouseEnter = this.mouseEnter.bind(this)
-        this.mouseOut = this.mouseOut.bind(this)
+
         this.div = document.createElement("div");
         this.div.className = "bsr-left-tooltip"
         if(this.props.options?.className){
@@ -104,74 +104,84 @@ export class ToolTip {
     private ActivateTooltip() {
 
         this.props.target?.addEventListener('mouseenter', this.mouseEnter)
-        this.props.target?.addEventListener('mouseleave', this.mouseOut)
+        this.props.target?.addEventListener('mouseleave', this.Close)
     }
-     getOffset(el: Element) {
+     getOffsetPosition(el: Element) {
         const rect = el.getBoundingClientRect();
         return {
             left: rect.left + window.scrollX,
             top: rect.top + window.scrollY
         };
     }
+    getOffsetAttrubute(el: Element) {
+        const rect = el.getBoundingClientRect();
+        return {
+            width: rect.width,
+            height: rect.height
+        };
+    }
 
 
-    private mouseEnter(e: MouseEvent) {
-        e.preventDefault();
-        MapToolTip.forEach((value)=>{
-            value.Close()
-        })
-        if(!this.isShow){
-            const element = e.target as HTMLElement
-            document.body.appendChild(this.div)
-            if(this.position==='left'){
-                let h = element.offsetTop + element.offsetHeight / 2 - this.div.offsetHeight / 2 +this.marginVertical;
-                if(this.isWindows){
-                    h=element.offsetTop + element.offsetHeight / 2
+    private mouseEnter() {
+        if(this.props.target!==undefined){
+
+            MapToolTip.forEach((value)=>{
+                value.Close()
+            })
+            if(!this.isShow){
+                const element = this.props.target
+                const position=this.getOffsetPosition(element!)
+                const attributes=this.getOffsetAttrubute(element!)
+                document.body.appendChild(this.div)
+                if(this.position==='left'){
+                    let h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 +this.marginVertical;
+                    if(this.isWindows){
+                        h=position.top + attributes.height / 2
+                    }
+                    let w = attributes.width + position.left+this.marginHorizontal ;
+                    this.div.style.top = h + "px"
+                    this.div.style.left = w + "px"
+                    this.isShow=true;
                 }
-                let w = element.offsetWidth + element.offsetLeft+this.marginHorizontal ;
-                this.div.style.top = h + "px"
-                this.div.style.left = w + "px"
-                this.isShow=true;
-            }
-            if(this.position==='right'){
-                let h = element.offsetTop + element.offsetHeight / 2 - this.div.offsetHeight / 2+this.marginVertical;
-                if(this.isWindows){
-                    h=element.offsetTop + element.offsetHeight / 2
+                if(this.position==='right'){
+                    let h = position.top + attributes.height / 2 - this.div.offsetHeight / 2+this.marginVertical;
+                    if(this.isWindows){
+                        h=position.top + attributes.height / 2
+                    }
+                    let w = position.left- this.div.offsetWidth-10 +this.marginHorizontal
+                    this.div.style.top = h + "px"
+                    this.div.style.left = w + "px"
+                    this.isShow=true;
                 }
-                let w = element.offsetLeft- this.div.offsetWidth-10 +this.marginHorizontal
-                this.div.style.top = h + "px"
-                this.div.style.left = w + "px"
-                this.isShow=true;
-            }
-            if(this.position==='bottom'){
-                let h = element.offsetTop + element.offsetHeight+this.marginVertical;
-                let w = element.offsetLeft+element.offsetWidth/2 - this.div.offsetWidth / 2+this.marginHorizontal
-                if(this.isWindows){
-                    w = element.offsetLeft+element.offsetWidth/2
+                if(this.position==='bottom'){
+                    let h = position.top + attributes.height+this.marginVertical;
+                    let w = position.left+attributes.width/2 - this.div.offsetWidth / 2+this.marginHorizontal
+                    if(this.isWindows){
+                        w = position.left+attributes.width/2
+                    }
+                    this.div.style.top = h + "px"
+                    this.div.style.left = w + "px"
+                    this.isShow=true;
                 }
-                this.div.style.top = h + "px"
-                this.div.style.left = w + "px"
-                this.isShow=true;
-            }
-            if(this.position==='top'){
-                let h = element.offsetTop-this.div.offsetHeight-5+this.marginVertical-5;
-                let w = element.offsetLeft+element.offsetWidth/2 - this.div.offsetWidth / 2+this.marginHorizontal
-                if(this.isWindows){
-                    w = element.offsetLeft+element.offsetWidth/2
+                if(this.position==='top'){
+                    let h = position.top-this.div.offsetHeight-5+this.marginVertical-5;
+                    let w = position.left+attributes.width/2 - this.div.offsetWidth / 2+this.marginHorizontal
+                    if(this.isWindows){
+                        w = position.left+attributes.width/2
+                    }
+                    this.div.style.top = h + "px"
+                    this.div.style.left = w + "px"
+                    this.isShow=true;
                 }
-                this.div.style.top = h + "px"
-                this.div.style.left = w + "px"
-                this.isShow=true;
+
             }
 
         }
 
+
     }
 
-    private mouseOut() {
-        document.body.removeChild<HTMLDivElement>(this.div)
-        this.isShow=false;
-    }
+
 
     public ContextMenuWillUnmount() {
         this.props.body = undefined

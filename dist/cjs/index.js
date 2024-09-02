@@ -77,7 +77,7 @@ var style = {
 var MapToolTip = new Map();
 var ToolTip = /** @class */ (function () {
     function ToolTip(props) {
-        var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+        var _a, _b, _c, _d, _e, _f, _g;
         this.isShow = false;
         this.position = 'left';
         this.props = props;
@@ -85,7 +85,6 @@ var ToolTip = /** @class */ (function () {
         MapToolTip.set(this.id, this);
         this.Close = this.Close.bind(this);
         this.mouseEnter = this.mouseEnter.bind(this);
-        this.mouseOut = this.mouseOut.bind(this);
         this.div = document.createElement("div");
         this.div.className = "bsr-left-tooltip";
         if ((_a = this.props.options) === null || _a === void 0 ? void 0 : _a.className) {
@@ -101,8 +100,10 @@ var ToolTip = /** @class */ (function () {
         else {
             this.innerRoot.render(React.createElement("div", { style: style }, this.props.body));
         }
+        this.isWindows = false;
         if (((_c = this.props.options) === null || _c === void 0 ? void 0 : _c.isWindowsClick) === true || ((_d = this.props.options) === null || _d === void 0 ? void 0 : _d.isWindows) === true) {
             this.ActivateWindows();
+            this.isWindows = true;
             this.div.style.cursor = "pointer";
         }
         else {
@@ -119,10 +120,6 @@ var ToolTip = /** @class */ (function () {
         this.marginHorizontal = 0;
         if ((_g = this.props.options) === null || _g === void 0 ? void 0 : _g.marginHorizontal) {
             this.marginHorizontal = this.props.options.marginHorizontal;
-        }
-        this.isWindows = false;
-        if (((_h = this.props.options) === null || _h === void 0 ? void 0 : _h.isWindowsClick) === true || ((_j = this.props.options) === null || _j === void 0 ? void 0 : _j.isWindows) === true) {
-            this.isWindows = true;
         }
     }
     ToolTip.prototype.Close = function () {
@@ -144,61 +141,74 @@ var ToolTip = /** @class */ (function () {
     ToolTip.prototype.ActivateTooltip = function () {
         var _a, _b;
         (_a = this.props.target) === null || _a === void 0 ? void 0 : _a.addEventListener('mouseenter', this.mouseEnter);
-        (_b = this.props.target) === null || _b === void 0 ? void 0 : _b.addEventListener('mouseleave', this.mouseOut);
+        (_b = this.props.target) === null || _b === void 0 ? void 0 : _b.addEventListener('mouseleave', this.Close);
     };
-    ToolTip.prototype.mouseEnter = function (e) {
-        e.preventDefault();
-        MapToolTip.forEach(function (value) {
-            value.Close();
-        });
-        if (!this.isShow) {
-            var element = e.target;
-            document.body.appendChild(this.div);
-            if (this.position === 'left') {
-                var h = element.offsetTop + element.offsetHeight / 2 - this.div.offsetHeight / 2 + this.marginVertical;
-                if (this.isWindows) {
-                    h = element.offsetTop + element.offsetHeight / 2;
+    ToolTip.prototype.getOffsetPosition = function (el) {
+        var rect = el.getBoundingClientRect();
+        return {
+            left: rect.left + window.scrollX,
+            top: rect.top + window.scrollY
+        };
+    };
+    ToolTip.prototype.getOffsetAttrubute = function (el) {
+        var rect = el.getBoundingClientRect();
+        return {
+            width: rect.width,
+            height: rect.height
+        };
+    };
+    ToolTip.prototype.mouseEnter = function () {
+        if (this.props.target !== undefined) {
+            MapToolTip.forEach(function (value) {
+                value.Close();
+            });
+            if (!this.isShow) {
+                var element = this.props.target;
+                var position = this.getOffsetPosition(element);
+                var attributes = this.getOffsetAttrubute(element);
+                document.body.appendChild(this.div);
+                if (this.position === 'left') {
+                    var h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 + this.marginVertical;
+                    if (this.isWindows) {
+                        h = position.top + attributes.height / 2;
+                    }
+                    var w = attributes.width + position.left + this.marginHorizontal;
+                    this.div.style.top = h + "px";
+                    this.div.style.left = w + "px";
+                    this.isShow = true;
                 }
-                var w = element.offsetWidth + element.offsetLeft + this.marginHorizontal;
-                this.div.style.top = h + "px";
-                this.div.style.left = w + "px";
-                this.isShow = true;
-            }
-            if (this.position === 'right') {
-                var h = element.offsetTop + element.offsetHeight / 2 - this.div.offsetHeight / 2 + this.marginVertical;
-                if (this.isWindows) {
-                    h = element.offsetTop + element.offsetHeight / 2;
+                if (this.position === 'right') {
+                    var h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 + this.marginVertical;
+                    if (this.isWindows) {
+                        h = position.top + attributes.height / 2;
+                    }
+                    var w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal;
+                    this.div.style.top = h + "px";
+                    this.div.style.left = w + "px";
+                    this.isShow = true;
                 }
-                var w = element.offsetLeft - this.div.offsetWidth - 10 + this.marginHorizontal;
-                this.div.style.top = h + "px";
-                this.div.style.left = w + "px";
-                this.isShow = true;
-            }
-            if (this.position === 'bottom') {
-                var h = element.offsetTop + element.offsetHeight + this.marginVertical;
-                var w = element.offsetLeft + element.offsetWidth / 2 - this.div.offsetWidth / 2 + this.marginHorizontal;
-                if (this.isWindows) {
-                    w = element.offsetLeft + element.offsetWidth / 2;
+                if (this.position === 'bottom') {
+                    var h = position.top + attributes.height + this.marginVertical;
+                    var w = position.left + attributes.width / 2 - this.div.offsetWidth / 2 + this.marginHorizontal;
+                    if (this.isWindows) {
+                        w = position.left + attributes.width / 2;
+                    }
+                    this.div.style.top = h + "px";
+                    this.div.style.left = w + "px";
+                    this.isShow = true;
                 }
-                this.div.style.top = h + "px";
-                this.div.style.left = w + "px";
-                this.isShow = true;
-            }
-            if (this.position === 'top') {
-                var h = element.offsetTop - this.div.offsetHeight - 5 + this.marginVertical - 5;
-                var w = element.offsetLeft + element.offsetWidth / 2 - this.div.offsetWidth / 2 + this.marginHorizontal;
-                if (this.isWindows) {
-                    w = element.offsetLeft + element.offsetWidth / 2;
+                if (this.position === 'top') {
+                    var h = position.top - this.div.offsetHeight - 5 + this.marginVertical - 5;
+                    var w = position.left + attributes.width / 2 - this.div.offsetWidth / 2 + this.marginHorizontal;
+                    if (this.isWindows) {
+                        w = position.left + attributes.width / 2;
+                    }
+                    this.div.style.top = h + "px";
+                    this.div.style.left = w + "px";
+                    this.isShow = true;
                 }
-                this.div.style.top = h + "px";
-                this.div.style.left = w + "px";
-                this.isShow = true;
             }
         }
-    };
-    ToolTip.prototype.mouseOut = function () {
-        document.body.removeChild(this.div);
-        this.isShow = false;
     };
     ToolTip.prototype.ContextMenuWillUnmount = function () {
         var _this = this;
@@ -208,7 +218,11 @@ var ToolTip = /** @class */ (function () {
         setTimeout(function () {
             _this.innerRoot.unmount();
             if (_this.isShow) {
-                document.body.removeChild(_this.div);
+                try {
+                    document.body.removeChild(_this.div);
+                }
+                catch (e) {
+                }
             }
             _this.props.target = undefined;
         });

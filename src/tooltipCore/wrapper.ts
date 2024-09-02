@@ -1,7 +1,7 @@
 import React, {ReactElement, useEffect} from "react";
 import {Options, ToolTip} from "./innerClass";
 
-export const useToolTip = function (target: React.RefObject<HTMLElement> | null,
+export const useToolTip = function (target: React.RefObject<Element> | null,
                                     body: ReactElement|string|number,
                                     options?:Options) {
     useEffect(() => {
