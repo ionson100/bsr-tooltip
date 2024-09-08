@@ -145,42 +145,42 @@ export class ToolTip {
                 if (this.position === 'custom') {
                     this.isShow = true;
                 }
-                if (this.position === 'left') {
+                if (this.position === 'right') {
                     let h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2);
                     let w = attributes.width + position.left + this.marginHorizontal;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
-                if (this.position === 'leftBottom') {
+                if (this.position === 'rightBottom') {
                     let h = position.top + attributes.height
                     let w = attributes.width + position.left + this.marginHorizontal;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
-                if (this.position === 'leftTop') {
+                if (this.position === 'rightTop') {
                     let h = position.top - this.div.offsetHeight
                     let w = attributes.width + position.left + this.marginHorizontal;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
-                if (this.position === 'right') {
+                if (this.position === 'left') {
                     let h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2) + this.marginVertical;
                     let w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
-                if (this.position === 'rightBottom') {
+                if (this.position === 'leftBottom') {
                     let h = position.top + attributes.height
                     let w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
-                if (this.position === 'rightTop') {
+                if (this.position === 'leftTop') {
                     let h = position.top - this.div.offsetHeight
                     let w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal
                     this.div.style.top = h + "px"

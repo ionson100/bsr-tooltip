@@ -171,42 +171,42 @@ var ToolTip = /** @class */ (function () {
                 if (this.position === 'custom') {
                     this.isShow = true;
                 }
-                if (this.position === 'left') {
+                if (this.position === 'right') {
                     var h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2);
                     var w = attributes.width + position.left + this.marginHorizontal;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
-                if (this.position === 'leftBottom') {
+                if (this.position === 'rightBottom') {
                     var h = position.top + attributes.height;
                     var w = attributes.width + position.left + this.marginHorizontal;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
-                if (this.position === 'leftTop') {
+                if (this.position === 'rightTop') {
                     var h = position.top - this.div.offsetHeight;
                     var w = attributes.width + position.left + this.marginHorizontal;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
-                if (this.position === 'right') {
+                if (this.position === 'left') {
                     var h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2) + this.marginVertical;
                     var w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
-                if (this.position === 'rightBottom') {
+                if (this.position === 'leftBottom') {
                     var h = position.top + attributes.height;
                     var w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
-                if (this.position === 'rightTop') {
+                if (this.position === 'leftTop') {
                     var h = position.top - this.div.offsetHeight;
                     var w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal;
                     this.div.style.top = h + "px";
@@ -284,6 +284,8 @@ var ToolTip = /** @class */ (function () {
 var useToolTip = function (target, body, options) {
     var res = {
         tooltip: undefined,
+        target: target,
+        options: options
     };
     //let toolTip:ToolTip|undefined
     useEffect(function () {

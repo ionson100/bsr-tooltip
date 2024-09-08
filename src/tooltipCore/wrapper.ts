@@ -1,15 +1,19 @@
 import React, {ReactElement, useEffect} from "react";
 import {Options, ToolTip} from "./innerClass";
-type res={
+type ResultUse ={
     tooltip?: ToolTip
+    options?: Options
+    target:React.RefObject<Element>|null
 }
 export const useToolTip = function (target: React.RefObject<Element> | null,
                                     body: ReactElement|string|number,
                                     options?:Options) {
 
 
-    const res:res={
+    const res:ResultUse={
         tooltip: undefined,
+        target: target,
+        options:options
     }
 
     //let toolTip:ToolTip|undefined
