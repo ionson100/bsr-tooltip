@@ -136,13 +136,6 @@ var ToolTip = /** @class */ (function () {
         }
         this.div.addEventListener("click", this.Close);
     };
-    ToolTip.prototype.maxZIndex = function () {
-        return Array.from(document.querySelectorAll('body *'))
-            .map(function (a) { return parseFloat(window.getComputedStyle(a).zIndex); })
-            .filter(function (a) { return !isNaN(a); })
-            .sort()
-            .pop();
-    };
     ToolTip.prototype.ActivateTooltip = function () {
         var _a, _b;
         (_a = this.props.target) === null || _a === void 0 ? void 0 : _a.addEventListener('mouseenter', this.mouseEnter);
@@ -155,7 +148,7 @@ var ToolTip = /** @class */ (function () {
             top: rect.top + window.scrollY
         };
     };
-    ToolTip.prototype.getOffsetAttribute = function (el) {
+    ToolTip.prototype.getOffsetAttrubute = function (el) {
         var rect = el.getBoundingClientRect();
         return {
             width: rect.width,
@@ -170,15 +163,8 @@ var ToolTip = /** @class */ (function () {
             if (!this.isShow) {
                 var element = this.props.target;
                 var position = this.getOffsetPosition(element);
-                var attributes = this.getOffsetAttribute(element);
-                var zIndex = this.maxZIndex();
-                this.div.style.zIndex = zIndex ? zIndex + 1 + "" : "100000000000000000000000";
+                var attributes = this.getOffsetAttrubute(element);
                 document.body.appendChild(this.div);
-                if (this.position === 'custom') {
-                    this.div.style.top = "";
-                    this.div.style.left = "";
-                    this.isShow = true;
-                }
                 if (this.position === 'left') {
                     var h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 + this.marginVertical;
                     if (this.isWindows) {
@@ -187,6 +173,7 @@ var ToolTip = /** @class */ (function () {
                     var w = attributes.width + position.left + this.marginHorizontal;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
+                    this.isShow = true;
                 }
                 if (this.position === 'right') {
                     var h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 + this.marginVertical;
