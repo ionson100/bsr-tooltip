@@ -99,6 +99,14 @@ export class ToolTip {
         this.div.addEventListener("click",this.Close)
 
     }
+     maxZIndex() {
+
+        return Array.from(document.querySelectorAll('body *'))
+            .map(a => parseFloat(window.getComputedStyle(a).zIndex))
+            .filter(a => !isNaN(a))
+            .sort()
+            .pop();
+    }
 
 
     private ActivateTooltip() {
@@ -113,7 +121,7 @@ export class ToolTip {
             top: rect.top + window.scrollY
         };
     }
-    getOffsetAttrubute(el: Element) {
+    getOffsetAttribute(el: Element) {
         const rect = el.getBoundingClientRect();
         return {
             width: rect.width,
@@ -131,7 +139,9 @@ export class ToolTip {
             if(!this.isShow){
                 const element = this.props.target
                 const position=this.getOffsetPosition(element!)
-                const attributes=this.getOffsetAttrubute(element!)
+                const attributes=this.getOffsetAttribute(element!)
+                const zIndex=this.maxZIndex()
+                this.div.style.zIndex=zIndex?zIndex+1+"":"100000000000000000000000"
                 document.body.appendChild(this.div)
                 if(this.position==='left'){
                     let h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 +this.marginVertical;
