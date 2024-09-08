@@ -7,7 +7,7 @@ export type Options = {
     isWindowsClick?: boolean
     style?: CSSProperties | undefined;
     className?: string,
-    position?: "top" | "bottom" | "left" | "right"
+    position?: "top" | "bottom" | "left" | "right"|"custom"
     marginVertical?: number
     marginHorizontal?: number
 }
@@ -147,6 +147,11 @@ export class ToolTip {
                 const zIndex = this.maxZIndex()
                 this.div.style.zIndex = zIndex ? zIndex + 1 + "" : "100000000000000000000000"
                 document.body.appendChild(this.div)
+                if(this.position==='custom'){
+                    this.div.style.top = ""
+                    this.div.style.left = ""
+                    this.isShow = true;
+                }
                 if (this.position === 'left') {
                     let h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 + this.marginVertical;
                     if (this.isWindows) {
@@ -155,7 +160,7 @@ export class ToolTip {
                     let w = attributes.width + position.left + this.marginHorizontal;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
-                    this.isShow = true;
+
                 }
                 if (this.position === 'right') {
                     let h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 + this.marginVertical;

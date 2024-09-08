@@ -4,7 +4,7 @@ export type Options = {
     isWindowsClick?: boolean;
     style?: CSSProperties | undefined;
     className?: string;
-    position?: "top" | "bottom" | "left" | "right";
+    position?: "top" | "bottom" | "left" | "right" | "custom";
     marginVertical?: number;
     marginHorizontal?: number;
 };
