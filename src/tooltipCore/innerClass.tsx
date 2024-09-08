@@ -133,6 +133,9 @@ export class ToolTip {
                 const position=this.getOffsetPosition(element!)
                 const attributes=this.getOffsetAttrubute(element!)
                 document.body.appendChild(this.div)
+                if(this.position==='custom'){
+                    this.isShow=true;
+                }
                 if(this.position==='left'){
                     let h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 +this.marginVertical;
                     if(this.isWindows){

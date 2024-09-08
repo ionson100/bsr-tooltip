@@ -165,6 +165,9 @@ var ToolTip = /** @class */ (function () {
                 var position = this.getOffsetPosition(element);
                 var attributes = this.getOffsetAttrubute(element);
                 document.body.appendChild(this.div);
+                if (this.position === 'custom') {
+                    this.isShow = true;
+                }
                 if (this.position === 'left') {
                     var h = position.top + attributes.height / 2 - this.div.offsetHeight / 2 + this.marginVertical;
                     if (this.isWindows) {
