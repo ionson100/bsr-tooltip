@@ -5,7 +5,7 @@ type Options = {
     isWindowsClick?: boolean;
     style?: CSSProperties | undefined;
     className?: string;
-    position?: "top" | "bottom" | "left" | "right" | "custom";
+    position?: "left" | "leftTop" | "leftBottom" | "top" | "bottom" | "right" | "custom" | "rightBottom" | "rightTop" | "bottomRight" | "bottomLeft" | "topLeft" | "topRight";
     marginVertical?: number;
     marginHorizontal?: number;
     isSelfClose?: boolean;
