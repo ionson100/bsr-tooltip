@@ -127,14 +127,17 @@ var ToolTip = /** @class */ (function () {
         }
     };
     ToolTip.prototype.ActivateWindows = function () {
-        var _a, _b, _c;
+        var _a, _b, _c, _d;
         if ((_a = this.props.options) === null || _a === void 0 ? void 0 : _a.isWindowsClick) {
             (_b = this.props.target) === null || _b === void 0 ? void 0 : _b.addEventListener('mouseup', this.mouseEnter);
         }
         else {
             (_c = this.props.target) === null || _c === void 0 ? void 0 : _c.addEventListener('mouseenter', this.mouseEnter);
         }
-        this.div.addEventListener("click", this.Close);
+        if ((_d = this.props.options) === null || _d === void 0 ? void 0 : _d.isSelfClose) ;
+        else {
+            this.div.addEventListener("click", this.Close);
+        }
     };
     ToolTip.prototype.ActivateTooltip = function () {
         var _a, _b;

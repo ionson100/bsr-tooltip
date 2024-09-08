@@ -10,6 +10,7 @@ export type Options ={
     position?: "top" | "bottom" | "left" | "right"|"custom"
     marginVertical?:number
     marginHorizontal?:number
+    isSelfClose?:boolean
 }
 export type TooltipProps = {
     target?: Element
@@ -96,7 +97,12 @@ export class ToolTip {
             this.props.target?.addEventListener('mouseenter', this.mouseEnter)
         }
 
-        this.div.addEventListener("click",this.Close)
+        if(this.props.options?.isSelfClose){
+
+        }else{
+            this.div.addEventListener("click",this.Close)
+        }
+
 
     }
 

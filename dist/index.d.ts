@@ -8,6 +8,7 @@ type Options = {
     position?: "top" | "bottom" | "left" | "right" | "custom";
     marginVertical?: number;
     marginHorizontal?: number;
+    isSelfClose?: boolean;
 };
 type TooltipProps = {
     target?: Element;

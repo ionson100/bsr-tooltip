@@ -7,6 +7,7 @@ export type Options = {
     position?: "top" | "bottom" | "left" | "right" | "custom";
     marginVertical?: number;
     marginHorizontal?: number;
+    isSelfClose?: boolean;
 };
 export type TooltipProps = {
     target?: Element;
