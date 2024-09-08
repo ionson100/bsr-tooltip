@@ -109,7 +109,7 @@ var ToolTip = /** @class */ (function () {
         else {
             this.ActivateTooltip();
         }
-        this.position = 'left';
+        this.position = 'right';
         if ((_e = this.props.options) === null || _e === void 0 ? void 0 : _e.position) {
             this.position = this.props.options.position;
         }

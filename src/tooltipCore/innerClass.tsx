@@ -67,7 +67,7 @@ export class ToolTip {
         } else {
             this.ActivateTooltip()
         }
-        this.position = 'left'
+        this.position = 'right'
         if (this.props.options?.position) {
             this.position = this.props.options.position
         }
