@@ -9,7 +9,7 @@ export type Options = {
     marginHorizontal?: number;
 };
 export type TooltipProps = {
-    target?: HTMLElement;
+    target?: Element;
     body: ReactElement | string | number | undefined;
     options?: Options;
 };
@@ -26,8 +26,10 @@ export declare class ToolTip {
     constructor(props: TooltipProps);
     Close(): void;
     private ActivateWindows;
+    private maxZIndex;
     private ActivateTooltip;
+    private getOffsetPosition;
+    private getOffsetAttribute;
     private mouseEnter;
-    private mouseOut;
     ContextMenuWillUnmount(): void;
 }

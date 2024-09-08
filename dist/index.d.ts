@@ -27,16 +27,10 @@ declare class ToolTip {
     constructor(props: TooltipProps);
     Close(): void;
     private ActivateWindows;
-    maxZIndex(): number | undefined;
+    private maxZIndex;
     private ActivateTooltip;
-    getOffsetPosition(el: Element): {
-        left: number;
-        top: number;
-    };
-    getOffsetAttribute(el: Element): {
-        width: number;
-        height: number;
-    };
+    private getOffsetPosition;
+    private getOffsetAttribute;
     private mouseEnter;
     ContextMenuWillUnmount(): void;
 }
