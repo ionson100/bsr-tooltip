@@ -232,16 +232,20 @@ var ToolTip = /** @class */ (function () {
 }());
 
 var useToolTip = function (target, body, options) {
-    var toolTip;
+    var res = {
+        tooltip: undefined,
+    };
+    //let toolTip:ToolTip|undefined
     useEffect(function () {
         if (target === null || target === void 0 ? void 0 : target.current) {
-            toolTip = new ToolTip({ target: target.current, body: body, options: options });
+            res.tooltip = new ToolTip({ target: target.current, body: body, options: options });
         }
         return function () {
-            toolTip === null || toolTip === void 0 ? void 0 : toolTip.ContextMenuWillUnmount();
+            var _a;
+            (_a = res.tooltip) === null || _a === void 0 ? void 0 : _a.ContextMenuWillUnmount();
         };
     }, [target === null || target === void 0 ? void 0 : target.current]);
-    return [toolTip];
+    return res;
 };
 
 export { ToolTip, useToolTip };

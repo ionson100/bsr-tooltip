@@ -34,6 +34,9 @@ declare class ToolTip {
     ContextMenuWillUnmount(): void;
 }
 
-declare const useToolTip: (target: React.RefObject<Element> | null, body: ReactElement | string | number, options?: Options) => (ToolTip | undefined)[];
+type res = {
+    tooltip?: ToolTip;
+};
+declare const useToolTip: (target: React.RefObject<Element> | null, body: ReactElement | string | number, options?: Options) => res;
 
 export { type Options, ToolTip, type TooltipProps, useToolTip };
