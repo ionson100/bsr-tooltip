@@ -241,7 +241,7 @@ var useToolTip = function (target, body, options) {
             toolTip === null || toolTip === void 0 ? void 0 : toolTip.ContextMenuWillUnmount();
         };
     }, [target === null || target === void 0 ? void 0 : target.current]);
-    return toolTip;
+    return [toolTip];
 };
 
 export { ToolTip, useToolTip };

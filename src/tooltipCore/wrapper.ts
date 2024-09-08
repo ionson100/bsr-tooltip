@@ -4,6 +4,9 @@ import {Options, ToolTip} from "./innerClass";
 export const useToolTip = function (target: React.RefObject<Element> | null,
                                     body: ReactElement|string|number,
                                     options?:Options) {
+
+
+
     let toolTip:ToolTip|undefined
     useEffect(() => {
 
@@ -15,5 +18,5 @@ export const useToolTip = function (target: React.RefObject<Element> | null,
         }
 
     }, [target?.current])
-    return toolTip
+    return [toolTip]
 }
