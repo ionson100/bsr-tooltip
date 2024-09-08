@@ -148,7 +148,7 @@ var ToolTip = /** @class */ (function () {
             top: rect.top + window.scrollY
         };
     };
-    ToolTip.prototype.getOffsetAttrubute = function (el) {
+    ToolTip.prototype.getOffsetAttribute = function (el) {
         var rect = el.getBoundingClientRect();
         return {
             width: rect.width,
@@ -163,7 +163,7 @@ var ToolTip = /** @class */ (function () {
             if (!this.isShow) {
                 var element = this.props.target;
                 var position = this.getOffsetPosition(element);
-                var attributes = this.getOffsetAttrubute(element);
+                var attributes = this.getOffsetAttribute(element);
                 document.body.appendChild(this.div);
                 if (this.position === 'custom') {
                     this.isShow = true;
@@ -232,8 +232,8 @@ var ToolTip = /** @class */ (function () {
 }());
 
 var useToolTip = function (target, body, options) {
+    var toolTip;
     useEffect(function () {
-        var toolTip;
         if (target === null || target === void 0 ? void 0 : target.current) {
             toolTip = new ToolTip({ target: target.current, body: body, options: options });
         }
@@ -241,6 +241,7 @@ var useToolTip = function (target, body, options) {
             toolTip === null || toolTip === void 0 ? void 0 : toolTip.ContextMenuWillUnmount();
         };
     }, [target === null || target === void 0 ? void 0 : target.current]);
+    return toolTip;
 };
 
 export { ToolTip, useToolTip };

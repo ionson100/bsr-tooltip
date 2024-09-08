@@ -106,14 +106,14 @@ export class ToolTip {
         this.props.target?.addEventListener('mouseenter', this.mouseEnter)
         this.props.target?.addEventListener('mouseleave', this.Close)
     }
-    getOffsetPosition(el: Element) {
+    private getOffsetPosition(el: Element) {
         const rect = el.getBoundingClientRect();
         return {
             left: rect.left + window.scrollX,
             top: rect.top + window.scrollY
         };
     }
-    getOffsetAttrubute(el: Element) {
+    private getOffsetAttribute(el: Element) {
         const rect = el.getBoundingClientRect();
         return {
             width: rect.width,
@@ -131,7 +131,7 @@ export class ToolTip {
             if(!this.isShow){
                 const element = this.props.target
                 const position=this.getOffsetPosition(element!)
-                const attributes=this.getOffsetAttrubute(element!)
+                const attributes=this.getOffsetAttribute(element!)
                 document.body.appendChild(this.div)
                 if(this.position==='custom'){
                     this.isShow=true;

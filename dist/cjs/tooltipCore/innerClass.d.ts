@@ -27,14 +27,8 @@ export declare class ToolTip {
     Close(): void;
     private ActivateWindows;
     private ActivateTooltip;
-    getOffsetPosition(el: Element): {
-        left: number;
-        top: number;
-    };
-    getOffsetAttrubute(el: Element): {
-        width: number;
-        height: number;
-    };
+    private getOffsetPosition;
+    private getOffsetAttribute;
     private mouseEnter;
     ContextMenuWillUnmount(): void;
 }

@@ -28,18 +28,12 @@ declare class ToolTip {
     Close(): void;
     private ActivateWindows;
     private ActivateTooltip;
-    getOffsetPosition(el: Element): {
-        left: number;
-        top: number;
-    };
-    getOffsetAttrubute(el: Element): {
-        width: number;
-        height: number;
-    };
+    private getOffsetPosition;
+    private getOffsetAttribute;
     private mouseEnter;
     ContextMenuWillUnmount(): void;
 }
 
-declare const useToolTip: (target: React.RefObject<Element> | null, body: ReactElement | string | number, options?: Options) => void;
+declare const useToolTip: (target: React.RefObject<Element> | null, body: ReactElement | string | number, options?: Options) => ToolTip | undefined;
 
 export { type Options, ToolTip, type TooltipProps, useToolTip };
