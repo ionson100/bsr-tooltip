@@ -1,14 +1,11 @@
 import React, { CSSProperties, ReactElement } from 'react';
 
 type Options = {
-    isWindows?: boolean;
-    isWindowsClick?: boolean;
     style?: CSSProperties | undefined;
     className?: string;
     position?: "left" | "leftTop" | "leftBottom" | "top" | "bottom" | "right" | "custom" | "rightBottom" | "rightTop" | "bottomRight" | "bottomLeft" | "topLeft" | "topRight";
-    marginVertical?: number;
-    marginHorizontal?: number;
     isSelfClose?: boolean;
+    mode?: "tooltip" | "popup" | "popupCloseSelf";
 };
 type TooltipProps = {
     target?: Element;
@@ -21,13 +18,13 @@ declare class ToolTip {
     private readonly div;
     private isShow;
     private position;
-    private readonly marginVertical;
-    private readonly marginHorizontal;
     private readonly id;
     private isWindows;
+    private mode;
     constructor(props: TooltipProps);
     Close(): void;
     private ActivateWindows;
+    private maxZIndex;
     private ActivateTooltip;
     private getOffsetPosition;
     private getOffsetAttribute;

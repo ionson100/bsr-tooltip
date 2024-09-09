@@ -3,14 +3,11 @@ import {createRoot, Root} from "react-dom/client";
 import {v4 as uuidv4} from 'uuid';
 
 export type Options = {
-    isWindows?: boolean
-    isWindowsClick?: boolean
     style?: CSSProperties | undefined;
     className?: string,
-    position?: "left" | "leftTop" | "leftBottom" | "top" | "bottom" | "right" | "custom" | "rightBottom" | "rightTop" | "bottomRight" | "bottomLeft"|"topLeft"|"topRight"
-    marginVertical?: number
-    marginHorizontal?: number
+    position?: "left" | "leftTop" | "leftBottom" | "top" | "bottom" | "right" | "custom" | "rightBottom" | "rightTop" | "bottomRight" | "bottomLeft" | "topLeft" | "topRight"
     isSelfClose?: boolean
+    mode?:"tooltip"|"popup"|"popupCloseSelf"
 }
 export type TooltipProps = {
     target?: Element
@@ -32,10 +29,9 @@ export class ToolTip {
     private readonly div: HTMLDivElement;
     private isShow = false;
     private position = 'left'
-    private readonly marginVertical: number
-    private readonly marginHorizontal: number
     private readonly id: string
     private isWindows: boolean
+    private mode:string
 
     constructor(props: TooltipProps) {
         this.props = props
@@ -43,6 +39,7 @@ export class ToolTip {
         MapToolTip.set(this.id, this)
         this.Close = this.Close.bind(this)
         this.mouseEnter = this.mouseEnter.bind(this)
+        this.mode=this.props.options?.mode??"tooltip"
 
         this.div = document.createElement("div");
         this.div.className = "bsr-left-tooltip"
@@ -59,25 +56,18 @@ export class ToolTip {
             this.innerRoot.render(<div style={style}>{this.props.body}</div>)
         }
         this.isWindows = false
-        if (this.props.options?.isWindowsClick === true || this.props.options?.isWindows === true) {
+        if (this.mode==='tooltip') {
+            this.ActivateTooltip()
+
+        } else {
             this.ActivateWindows()
             this.isWindows = true
             this.div.style.cursor = "pointer"
 
-        } else {
-            this.ActivateTooltip()
         }
         this.position = 'right'
         if (this.props.options?.position) {
             this.position = this.props.options.position
-        }
-        this.marginVertical = 0
-        if (this.props.options?.marginVertical) {
-            this.marginVertical = this.props.options.marginVertical
-        }
-        this.marginHorizontal = 0
-        if (this.props.options?.marginHorizontal) {
-            this.marginHorizontal = this.props.options.marginHorizontal
         }
 
 
@@ -92,19 +82,28 @@ export class ToolTip {
 
     private ActivateWindows() {
 
-        if (this.props.options?.isWindowsClick) {
+        if (this.mode==='popup'||this.mode==='popupCloseSelf') {
             this.props.target?.addEventListener('mouseup', this.mouseEnter)
         } else {
             this.props.target?.addEventListener('mouseenter', this.mouseEnter)
         }
 
-        if (this.props.options?.isSelfClose) {
+        if (this.mode==='popupCloseSelf') {
 
         } else {
             this.div.addEventListener("click", this.Close)
         }
 
 
+    }
+
+    private maxZIndex() {
+
+        return Array.from(document.querySelectorAll('body *'))
+            .map(a => parseFloat(window.getComputedStyle(a).zIndex))
+            .filter(a => !isNaN(a))
+            .sort()
+            .pop();
     }
 
 
@@ -141,62 +140,69 @@ export class ToolTip {
                 const element = this.props.target
                 const position = this.getOffsetPosition(element!)
                 const attributes = this.getOffsetAttribute(element!)
+                const zIndex = this.maxZIndex();
+                if (zIndex) {
+                    this.div.style.zIndex = `${zIndex + 1}`
+                } else {
+                    this.div.style.zIndex = "10000000000000"
+                }
+
                 document.body.appendChild(this.div)
                 if (this.position === 'custom') {
                     this.isShow = true;
                 }
                 if (this.position === 'right') {
                     let h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2);
-                    let w = attributes.width + position.left + this.marginHorizontal;
+                    let w = attributes.width + position.left;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
                 if (this.position === 'rightBottom') {
                     let h = position.top + attributes.height
-                    let w = attributes.width + position.left + this.marginHorizontal;
+                    let w = attributes.width + position.left;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
                 if (this.position === 'rightTop') {
                     let h = position.top - this.div.offsetHeight
-                    let w = attributes.width + position.left + this.marginHorizontal;
+                    let w = attributes.width + position.left;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
                 if (this.position === 'left') {
-                    let h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2) + this.marginVertical;
-                    let w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal
+                    let h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2);
+                    let w = position.left - this.div.offsetWidth - 10;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
                 if (this.position === 'leftBottom') {
                     let h = position.top + attributes.height
-                    let w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal
+                    let w = position.left - this.div.offsetWidth - 10;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
                 if (this.position === 'leftTop') {
                     let h = position.top - this.div.offsetHeight
-                    let w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal
+                    let w = position.left - this.div.offsetWidth - 10;
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
                 if (this.position === 'bottom') {
-                    let h = position.top + attributes.height + this.marginVertical;
-                    let w = position.left + attributes.width / 2 - this.div.offsetWidth / 2 + this.marginHorizontal
+                    let h = position.top + attributes.height;
+                    let w = position.left + attributes.width / 2 - this.div.offsetWidth / 2;
 
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
                 if (this.position === 'bottomRight') {
-                    let h = position.top + attributes.height + this.marginVertical;
+                    let h = position.top + attributes.height;
 
                     let w = position.left + attributes.width
                     this.div.style.top = h + "px"
@@ -204,7 +210,7 @@ export class ToolTip {
                     this.isShow = true;
                 }
                 if (this.position === 'bottomLeft') {
-                    let h = position.top + attributes.height + this.marginVertical;
+                    let h = position.top + attributes.height;
 
                     let w = position.left - this.div.offsetWidth
                     this.div.style.top = h + "px"
@@ -212,8 +218,8 @@ export class ToolTip {
                     this.isShow = true;
                 }
                 if (this.position === 'top') {
-                    let h = position.top - this.div.offsetHeight - 5 + this.marginVertical - 5;
-                    let w = position.left + attributes.width / 2 - this.div.offsetWidth / 2 + this.marginHorizontal
+                    let h = position.top - this.div.offsetHeight - 10;
+                    let w = position.left + attributes.width / 2 - this.div.offsetWidth / 2;
                     if (this.isWindows) {
                         w = position.left + attributes.width / 2
                     }
@@ -222,14 +228,14 @@ export class ToolTip {
                     this.isShow = true;
                 }
                 if (this.position === 'topRight') {
-                    let h = position.top - this.div.offsetHeight - 5 + this.marginVertical - 5;
+                    let h = position.top - this.div.offsetHeight - 10;
                     let w = position.left + attributes.width
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"
                     this.isShow = true;
                 }
                 if (this.position === 'topLeft') {
-                    let h = position.top - this.div.offsetHeight - 5 + this.marginVertical - 5;
+                    let h = position.top - this.div.offsetHeight - 10;
                     let w = position.left - this.div.offsetWidth
                     this.div.style.top = h + "px"
                     this.div.style.left = w + "px"

@@ -77,7 +77,7 @@ var style = {
 var MapToolTip = new Map();
 var ToolTip = /** @class */ (function () {
     function ToolTip(props) {
-        var _a, _b, _c, _d, _e, _f, _g;
+        var _a, _b, _c, _d, _e;
         this.isShow = false;
         this.position = 'left';
         this.props = props;
@@ -85,12 +85,13 @@ var ToolTip = /** @class */ (function () {
         MapToolTip.set(this.id, this);
         this.Close = this.Close.bind(this);
         this.mouseEnter = this.mouseEnter.bind(this);
+        this.mode = (_b = (_a = this.props.options) === null || _a === void 0 ? void 0 : _a.mode) !== null && _b !== void 0 ? _b : "tooltip";
         this.div = document.createElement("div");
         this.div.className = "bsr-left-tooltip";
-        if ((_a = this.props.options) === null || _a === void 0 ? void 0 : _a.className) {
+        if ((_c = this.props.options) === null || _c === void 0 ? void 0 : _c.className) {
             this.div.className = this.props.options.className;
         }
-        if ((_b = this.props.options) === null || _b === void 0 ? void 0 : _b.style) {
+        if ((_d = this.props.options) === null || _d === void 0 ? void 0 : _d.style) {
             Object.assign(this.div.style, this.props.options.style);
         }
         this.innerRoot = client.createRoot(this.div);
@@ -101,25 +102,17 @@ var ToolTip = /** @class */ (function () {
             this.innerRoot.render(React.createElement("div", { style: style }, this.props.body));
         }
         this.isWindows = false;
-        if (((_c = this.props.options) === null || _c === void 0 ? void 0 : _c.isWindowsClick) === true || ((_d = this.props.options) === null || _d === void 0 ? void 0 : _d.isWindows) === true) {
+        if (this.mode === 'tooltip') {
+            this.ActivateTooltip();
+        }
+        else {
             this.ActivateWindows();
             this.isWindows = true;
             this.div.style.cursor = "pointer";
         }
-        else {
-            this.ActivateTooltip();
-        }
         this.position = 'right';
         if ((_e = this.props.options) === null || _e === void 0 ? void 0 : _e.position) {
             this.position = this.props.options.position;
-        }
-        this.marginVertical = 0;
-        if ((_f = this.props.options) === null || _f === void 0 ? void 0 : _f.marginVertical) {
-            this.marginVertical = this.props.options.marginVertical;
-        }
-        this.marginHorizontal = 0;
-        if ((_g = this.props.options) === null || _g === void 0 ? void 0 : _g.marginHorizontal) {
-            this.marginHorizontal = this.props.options.marginHorizontal;
         }
     }
     ToolTip.prototype.Close = function () {
@@ -129,17 +122,24 @@ var ToolTip = /** @class */ (function () {
         }
     };
     ToolTip.prototype.ActivateWindows = function () {
-        var _a, _b, _c, _d;
-        if ((_a = this.props.options) === null || _a === void 0 ? void 0 : _a.isWindowsClick) {
-            (_b = this.props.target) === null || _b === void 0 ? void 0 : _b.addEventListener('mouseup', this.mouseEnter);
+        var _a, _b;
+        if (this.mode === 'popup' || this.mode === 'popupCloseSelf') {
+            (_a = this.props.target) === null || _a === void 0 ? void 0 : _a.addEventListener('mouseup', this.mouseEnter);
         }
         else {
-            (_c = this.props.target) === null || _c === void 0 ? void 0 : _c.addEventListener('mouseenter', this.mouseEnter);
+            (_b = this.props.target) === null || _b === void 0 ? void 0 : _b.addEventListener('mouseenter', this.mouseEnter);
         }
-        if ((_d = this.props.options) === null || _d === void 0 ? void 0 : _d.isSelfClose) ;
+        if (this.mode === 'popupCloseSelf') ;
         else {
             this.div.addEventListener("click", this.Close);
         }
+    };
+    ToolTip.prototype.maxZIndex = function () {
+        return Array.from(document.querySelectorAll('body *'))
+            .map(function (a) { return parseFloat(window.getComputedStyle(a).zIndex); })
+            .filter(function (a) { return !isNaN(a); })
+            .sort()
+            .pop();
     };
     ToolTip.prototype.ActivateTooltip = function () {
         var _a, _b;
@@ -169,76 +169,83 @@ var ToolTip = /** @class */ (function () {
                 var element = this.props.target;
                 var position = this.getOffsetPosition(element);
                 var attributes = this.getOffsetAttribute(element);
+                var zIndex = this.maxZIndex();
+                if (zIndex) {
+                    this.div.style.zIndex = "".concat(zIndex + 1);
+                }
+                else {
+                    this.div.style.zIndex = "10000000000000";
+                }
                 document.body.appendChild(this.div);
                 if (this.position === 'custom') {
                     this.isShow = true;
                 }
                 if (this.position === 'right') {
                     var h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2);
-                    var w = attributes.width + position.left + this.marginHorizontal;
+                    var w = attributes.width + position.left;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'rightBottom') {
                     var h = position.top + attributes.height;
-                    var w = attributes.width + position.left + this.marginHorizontal;
+                    var w = attributes.width + position.left;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'rightTop') {
                     var h = position.top - this.div.offsetHeight;
-                    var w = attributes.width + position.left + this.marginHorizontal;
+                    var w = attributes.width + position.left;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'left') {
-                    var h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2) + this.marginVertical;
-                    var w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal;
+                    var h = position.top + Math.round(attributes.height / 2) - Math.round(this.div.offsetHeight / 2);
+                    var w = position.left - this.div.offsetWidth - 10;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'leftBottom') {
                     var h = position.top + attributes.height;
-                    var w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal;
+                    var w = position.left - this.div.offsetWidth - 10;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'leftTop') {
                     var h = position.top - this.div.offsetHeight;
-                    var w = position.left - this.div.offsetWidth - 10 + this.marginHorizontal;
+                    var w = position.left - this.div.offsetWidth - 10;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'bottom') {
-                    var h = position.top + attributes.height + this.marginVertical;
-                    var w = position.left + attributes.width / 2 - this.div.offsetWidth / 2 + this.marginHorizontal;
+                    var h = position.top + attributes.height;
+                    var w = position.left + attributes.width / 2 - this.div.offsetWidth / 2;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'bottomRight') {
-                    var h = position.top + attributes.height + this.marginVertical;
+                    var h = position.top + attributes.height;
                     var w = position.left + attributes.width;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'bottomLeft') {
-                    var h = position.top + attributes.height + this.marginVertical;
+                    var h = position.top + attributes.height;
                     var w = position.left - this.div.offsetWidth;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'top') {
-                    var h = position.top - this.div.offsetHeight - 5 + this.marginVertical - 5;
-                    var w = position.left + attributes.width / 2 - this.div.offsetWidth / 2 + this.marginHorizontal;
+                    var h = position.top - this.div.offsetHeight - 10;
+                    var w = position.left + attributes.width / 2 - this.div.offsetWidth / 2;
                     if (this.isWindows) {
                         w = position.left + attributes.width / 2;
                     }
@@ -247,14 +254,14 @@ var ToolTip = /** @class */ (function () {
                     this.isShow = true;
                 }
                 if (this.position === 'topRight') {
-                    var h = position.top - this.div.offsetHeight - 5 + this.marginVertical - 5;
+                    var h = position.top - this.div.offsetHeight - 10;
                     var w = position.left + attributes.width;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
                     this.isShow = true;
                 }
                 if (this.position === 'topLeft') {
-                    var h = position.top - this.div.offsetHeight - 5 + this.marginVertical - 5;
+                    var h = position.top - this.div.offsetHeight - 10;
                     var w = position.left - this.div.offsetWidth;
                     this.div.style.top = h + "px";
                     this.div.style.left = w + "px";
