@@ -62,8 +62,9 @@ export class ToolTip {
         } else {
             this.ActivateWindows()
             this.isWindows = true
-            this.div.style.cursor = "pointer"
-
+            if(this.mode==='popup'){
+                this.div.style.cursor = "pointer"
+            }
         }
         this.position = 'right'
         if (this.props.options?.position) {
