@@ -106,7 +106,9 @@ var ToolTip = /** @class */ (function () {
         else {
             this.ActivateWindows();
             this.isWindows = true;
-            this.div.style.cursor = "pointer";
+            if (this.mode === 'popup') {
+                this.div.style.cursor = "pointer";
+            }
         }
         this.position = 'right';
         if ((_e = this.props.options) === null || _e === void 0 ? void 0 : _e.position) {

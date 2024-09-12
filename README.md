@@ -1,4 +1,4 @@
-# bsr-context-menu
+# bsr-tooltip
 
 > React component tooltip
 
